@@ -1,0 +1,302 @@
+# Changelog — ArcKit Plugin
+
+All notable changes to the ArcKit Claude Code plugin will be documented in this file.
+
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+Releases before 6.14.0 are in the [changelog archive](https://github.com/tractorjuice/arc-kit/blob/main/docs/changelog/arckit-plugin-archive.md).
+
+## [Unreleased]
+
+## [6.19.0] — 2026-11-02
+
+### Added
+
+- **`arckit-uk-legacy`, a new optional overlay** (#1050, from @chrisns). `/arckit-uk-legacy:uk-legacy-assessment` classifies existing systems against the UK's *Updated Definition of Legacy IT*, calculates the separate published risk score, and links each finding to a remediation action. It is experimental and off by default.
+
+### Fixed
+
+- **`/arckit:pages` sites no longer run HTML from documents or filenames** (#875, from @johnfelipe). Rendered Markdown is sanitised, every title and path is escaped, and Mermaid diagrams run in strict mode.
+- **`/arckit:pages` leaves out gitignored files inside a published project** (#1026, from @johnfelipe), not only gitignored project folders.
+- **The `/arckit:pages` dashboard shows change, audit, framework and procurement documents** (#1035).
+- **`/arckit:import-okf` shows imported HTML as text** (#1021, from @johnfelipe), so a tag in a bundle can't run on your `/arckit:pages` site.
+- **The protected-file guard checks the file a write actually lands in** (#1025, from @johnfelipe). It follows symlinks, protects every `.env.*` file except the example, sample and template placeholders, and also checks `NotebookEdit`.
+- **The filename hook no longer creates folders, and acts only inside your project** (#1019, from @johnfelipe).
+- **A research reader's reply that fails the handoff check is withheld** (#1020, from @johnfelipe), so text copied from a vendor page can't reach the conversation that holds Write and Bash.
+- **`/arckit:health` won't write through a symbolic link** (#1022, from @johnfelipe).
+- **Session history and new external file names reach Claude as fenced data** (#1023, from @johnfelipe), so a commit subject can't pose as an instruction.
+
+## [6.18.3] — 2026-10-26
+
+### Changed
+
+- **Guides open with the answer.** The TCoP, ATRS and Secure by Design guides and 26 command guides now start with what the standard or document is and who needs it, then the command, with their facts checked at source. Two new guides cover the AWS documentation and Microsoft Learn MCP servers.
+
+### Fixed
+
+- **Re-running a command no longer overwrites your earlier document** (#946). Commands that write one document per project now write the next version beside the earlier one, 1.1 for a refresh or 2.0 when the scope changes, and leave the earlier file as it was.
+- **Commands read the documents they name.** Prompts that named document codes ArcKit never writes, such as AWSR, AZUR and DM, now use the registered codes, so commands no longer miss the AWS or Azure research, the data model or the JSP 936 assessment. Cloud research reads the vendor HLD, and nine commands now read Google Cloud research alongside AWS and Azure.
+- **Bulk builds write requirements after the stakeholder analysis**, which requirements read.
+- **ArcKit's helper scripts work on a Mac**, with its older bash and its own `sed` and `date`.
+- **Google Cloud research reads documentation pages again.** Google replaced its page-fetching tools in March 2026.
+- **Traceability and analysis see each requirement's real priority.** Every requirement used to read as SHOULD. Security requirements are now `NFR-SEC` everywhere.
+- **Documents for assurance boards match their sources:** JSP 936, DPIA, business case, risk, Service Standard, TCoP, FinOps, stakeholder and MOD Secure by Design documents.
+- **DOS7 buying runs on the Contract Award Service**, and DOS and G-Cloud award notices go on Find a Tender.
+- **G-Cloud 15, a valid ODCS export, a working DFD render command and current names** in `/arckit:gcloud-search`, `/arckit:data-mesh-contract`, `/arckit:dfd` and ten other commands.
+- **The secret scanner checks your own docs, READMEs and changelogs** (#881, from @johnfelipe). It skipped any path containing `docs/` or ending in `README.md` or `CHANGELOG.md`.
+- **File and folder names can't pose as instructions** (#877, from @johnfelipe). A name with a line break could add a line of its own to what the hooks tell Claude.
+
+## [6.18.2] — 2026-10-12
+
+### Removed
+
+- **The status band above the prompt is gone.** It was a Claude Code mod, and the Claude plugin directory holds any plugin that includes one for a reviewer. `/arckit:health` still reports stale drafts and overdue reviews, and the stale-artefact notice at session start still lists them. Nothing ArcKit checks or blocks has changed. If you set `ARCKIT_NO_STATUS_BAND`, you can remove it.
+
+## [6.18.1] — 2026-10-12
+
+### Changed
+
+- **This changelog now lists only recent releases.** At 321 KB it was too large for the Claude plugin directory's validator to read. Releases before 6.13.0 are in the [changelog archive](https://github.com/tractorjuice/arc-kit/blob/main/docs/changelog/arckit-plugin-archive.md), word for word, and each minor series moves there as it ages out.
+- **This plugin ships 469 files instead of 587**, under the Claude plugin directory's 512-file limit. Overlay guides now ship with their overlay, and `/arckit:pages` adds them to your site when that overlay is installed. The Self-Harness modules, the status band's engine test, a lint config and `check-prerequisites.sh` no longer ship; nothing an installed plugin runs used them.
+
+### Fixed
+
+- **Templates you customise are now used.** `/arckit:customize` saves templates to `.arckit/templates-custom/`, but 72 commands and three writer agents only looked in `.arckit/templates/`, so a customised template was ignored and the default was used instead. They now check `.arckit/templates-custom/`, then `.arckit/templates/`, then the plugin's default. Contributed by @trednets (#930).
+
+## [6.18.0] — 2026-10-09
+
+### Added
+
+- **`/arckit:social-value`** (`arckit-uk-gcloud`) writes the supplier's G-Cloud 15 social value commitments to `projects/000-global/supplier/ARC-000-SOCV-v1.0.md`: the declaration's social value sections A to C, the missions, policy outcomes and measures committed to (worded as the live listings show them, with the declaration checkbox to tick where GCA's wording is longer), a delivery plan for each, a named Social Value Contact and operational readiness. Social value is 10% of the score on every lot, marked pass/fail.
+- **`/arckit:lot-questions`** (`arckit-uk-gcloud`) writes the G-Cloud 15 lot questions to `projects/000-global/supplier/ARC-000-LOTQ-v1.0.md`, one Part per lot group bid for: the Lot 1a/1b conditions of participation and the five scored quality answers, each drafted within its 250-word limit and word-counted, and the Lot 2 and Lot 3 mandatory award criteria and certifications. It runs after the SDDs, pricing and security, because the Lot 2a/2b and Lot 3 award criteria repeat each service's answers.
+- **Three doc-type codes**, `SOCV` (Social Value Commitments) and `LOTQ` (G-Cloud Lot Questions), both HIGH severity, and `RATE` (G-Cloud Lot 3 Rate Card), the supplier's one Lot 3 rate card that `/arckit:pricing` writes to `projects/000-global/supplier/` and every Lot 3 service shares. All three are registered in `doc-types.mjs` and `/arckit:pages`, with quality-checklist sections. The G-Cloud sections of the checklist (SUPP, DECL, SVCD, SDD, PRIC, SECA, GCMP, GCRV) now check G-Cloud 15 rules.
+
+### Changed
+
+- **Business cases, research findings and design reviews now open with the decision.** A Strategic Outline Business Case's Executive Summary starts with the Go/No-Go recommendation and the recommended option, where it used to reach them only after the costs, benefits and ROI. Research findings start with the overall build-or-buy recommendation, and the research scope moves to the end of the summary. HLD and DLD reviews put the Executive Summary first, as section 1, ahead of the review overview. Lists of reasons and benefits are no longer fixed at three. If you have customised one of these templates, your copy keeps its old order.
+
+- **`/arckit:fr-irn` follows the IRN v1.2 grid.** The aDRI replaced the v0.4 questionnaire with `Référentiel_IRN_v1.2.xlsx`, and the way the grid is filled changed with it. The assessment is now built around the digital assets in scope instead of five organisational layers: each pillar lists its criteria by ID, with the criterion's scope (organisation or asset) and a maturity level to report from the official grid, where the old scaffold had R/NR cells per layer. The summary matrix is pillars by asset, and the document no longer promises a 0–100 score the workbook does not compute. RES-7 and RES-8 carry their v1.2 names. The command, template, guide and quality checklist are updated; criterion text is still not reproduced (CC BY-NC-ND). Contributed by @thomas-jardinet (#911).
+
+- **The `arckit-uk-gcloud` overlay now writes G-Cloud 15 bids.** G-Cloud 15 (RM1557.15) went live on 6 August 2026 under the Procurement Act 2023, run by the Government Commercial Agency (GCA, formerly Crown Commercial Service), and the Digital Marketplace now lists only G-Cloud 15 services. The overlay was a port of G-Cloud Kit's G-Cloud 14 commands; it now carries G-Cloud Kit's G-Cloud 15 rewrite as of v0.8.2, adapted to ArcKit's projects and document IDs, including the v0.8.2 fixes from running the workflow on two real supplier projects. G-Cloud 14 is no longer supported. Every question, limit, scoring rule and pricing rule comes from GCA's question export and tender documents, and where the 42,893 live G-Cloud 15 listings (scraped 7 October 2026) show a rule the export doesn't state, the listings are the evidence.
+  - **Five lots instead of three.** `/arckit:service-design` chooses between Lots 1a (IaaS and PaaS), 1b (above OFFICIAL), 2a (iSaaS), 2b (SaaS) and 3 (Cloud Support), records the lot on the service design, and names the matching SDD command.
+  - **One SDD command per lot.** `/arckit:sdd-lot1` is replaced by `/arckit:sdd-lot1a` and `/arckit:sdd-lot1b`, and `/arckit:sdd-lot2` by `/arckit:sdd-lot2a` and `/arckit:sdd-lot2b`; `/arckit:sdd-lot3` is rewritten. Lots that ask the same service questions share a template (1a/1b, 2a/2b), and each template is rebuilt from GCA's question export, section by section.
+  - **Lot 3 is priced on one DDaT rate card per supplier**, in place of the SFIA rate card: a maximum UK and offshore day rate for each job family, role and role level offered. Every Lot 3 listing shows the supplier's whole card (only 2 of the 1,135 suppliers with several live Lot 3 services show different cards), so `/arckit:pricing` keeps it once, as `ARC-000-RATE`. `/arckit:sdd-lot3` lists the role levels that deliver the service and copies no rates, and roles outside DDaT, such as procurement advisers, are priced at the nearest DDaT role and level. The service sections G-Cloud 15 dropped from Lot 3 are gone.
+  - **`/arckit:pricing` follows each lot's rules and scoring**: the 1a/1b price formula with its onboarding table and minimum discount, the 2a/2b discount bands (scored on their total), and Lot 3's average day rate. Price on application, "from £x" and unexplained ranges are flagged; the G-Cloud 14 minimum/maximum price, unit and interval fields are gone.
+  - **`/arckit:declaration` follows the Procurement Act 2023**: Central Digital Platform registration and PPON, exclusion grounds declared on the CDP, connected and associated persons, the debarment list, payments in contracts over £5m a year, modern slavery, and the question about third-party agents or bid writers, which the command shows but never answers for you. It also fixes the G-Cloud 14 declaration's exclusion grounds, which listed tax evasion as mandatory and only 7 of the discretionary grounds.
+  - **Security and certifications by lot** in `/arckit:security`: ISO 9001, 20000-1 and 27001 for Lot 1a/1b bids; Cyber Essentials Plus (1a/1b) and Cyber Essentials (2a, 2b and 3), which are mandatory for call-offs but not for the bid, so a missing one is a call-off warning, not a failed bid; the new post-quantum cryptography, Software Security Code of Practice, AI chatbot and FOCUS questions. NCSC principles 3 and 13 use their current names.
+  - **`/arckit:review`, `/arckit:submission-pack`, `/arckit:supplier-profile` and `/arckit:gcloud-competitors`** check, bundle and compare the new documents and lots, with the G-Cloud 15 limits (service name 100 characters, description 500 characters, features and benefits 10 words each).
+  - **One category group per service.** None of the live listings has categories in more than one `Root > Group`, so the service design and SDDs record one category group, an offer that spans groups is designed as one service per group, and `/arckit:review` blocks on a service whose categories span groups.
+  - **A word limit on every free-text answer.** The export states few, but the Digital Platform keeps the other free-text answers within 50, 100 or 200 words. The framework reference tabulates them by lot with the listing evidence, each SDD answer shows its limit on a `**Words:**` line, and the SDD commands and `/arckit:review` recount the answers.
+  - **Options worded as the live listings show them** ("Not a reseller", "Developed Vetting (DV)", "TLS (version 1.2 or above)" and so on), with the Digital Platform's wording beside any option it words differently.
+  - **Checks that catch unfinished and out-of-date documents.** `/arckit:review` and `/arckit:submission-pack` share one placeholder scan (`[PENDING]` in every form, older markers such as `[TODO]` and `[TBC]`, and template fields never filled in) and one check for documents left over from G-Cloud 14. `/arckit:review` also checks the SDD against the pricing document and the supplier profile's new Listing Contact, and `/arckit:submission-pack` writes the supplier-level answers once per bid. A tender on Lots 2a/2b or 3 is disqualified only when all four award criteria mark under 33. The overlay ships no scripts, so these checks are inline shell, kept identical across commands by tests.
+  - **Recommended order:** supplier profile, social value, service design, the lot's SDD, pricing and security, lot questions, declaration, review, submission pack. Lot questions and declaration flag a service design from G-Cloud 14 rather than skipping it.
+  - **The `sfia-skills` skill is now `ddat-rate-card`**, with GCA's Lot 3 rate card (9 job families, 58 roles, 222 role levels) and what suppliers charge for common role levels. `gcloud-framework` carries the G-Cloud 15 question references by lot, the declaration, the social value model and every lot's category tree, in place of the old G-Cloud 13 question list. `cloud-security` adds the G-Cloud 15 certification requirements.
+  - The `uk-gcloud-submission` recipe builds the two new supplier-wide documents, runs the lot questions after the SDD, pricing and security, and defaults to `/arckit:sdd-lot2b`.
+
+### Removed
+
+- **`/arckit:sdd-lot1` and `/arckit:sdd-lot2`** (`arckit-uk-gcloud`). Use `/arckit:sdd-lot1a` or `/arckit:sdd-lot1b`, and `/arckit:sdd-lot2a` or `/arckit:sdd-lot2b`. Their guides are removed with them.
+- **The `sfia-skills` skill** (`arckit-uk-gcloud`), replaced by `ddat-rate-card`. G-Cloud 15 prices Lot 3 by DDaT role level; the SFIA reference stays inside the new skill for describing a team's skills, not for pricing.
+
+## [6.17.5] — 2026-10-04
+
+### Fixed
+
+- **The status line above the prompt now shows in the Claude desktop app's Code tab.** 6.17.4 said it would, but it stayed empty there. The desktop app connects to its session a moment after the session starts, and ArcKit only looked for your projects at the start, when no app was connected yet. It now also looks when the desktop app connects. The terminal is unchanged.
+
+## [6.17.4] — 2026-10-04
+
+### Fixed
+
+- **The status line above the prompt now appears when you start Claude Code inside your projects folder.** It used to look for `projects/` only in the folder where Claude Code started, so starting inside `projects/` or a project folder showed nothing. It now searches the parent folders too, the way the rest of ArcKit finds your projects. It also now shows in the Claude desktop app's Code tab, which Claude Code 2.1.289 supports, as well as in the terminal.
+
+## [6.17.3] — 2026-10-02
+
+### Added
+
+- **A status line above the prompt** (#580). In a repository with `projects/`, Claude Code now shows one line above where you type: how many projects and artefacts you have, how many are DRAFT, and how many reviews are overdue. When something needs attention, the line turns yellow and points you at `/arckit:health`. It counts the same way `/arckit:health` does, updates after any turn that changed files, and never blocks or changes anything Claude does. Set `ARCKIT_NO_STATUS_BAND` to turn it off. It needs Claude Code v2.1.287, the release that adds mods.
+
+### Changed
+
+- **Claude Code floor raised to v2.1.287 for Claude mods** (#580). v2.1.287 lets a plugin ship a mod, which ArcKit uses for the status line above. It also fixes plugin SessionStart hooks not running in new cloud sessions, so ArcKit's session set-up and version check now run there. The SessionStart version check, both READMEs, CLAUDE.md, the start, MCP-servers, enterprise-scale and research-family guides, and the repo's `minimumVersion` are updated.
+
+### Fixed
+
+- **ArcKit no longer changes a tool call before it runs** (#580). The Claude plugin directory turned down 6.17.2 for the same reason as 6.17.1: it reads a hook that rewrites a tool call as the plugin approving its own action. Three hooks did that, and none of them now touches a tool call:
+  - **Project context for ArcKit's own subagents**, such as the framework agent, now arrives when the subagent starts, as part of its own conversation, instead of being pasted into the request that launched it. The old hook also missed agents named the way Claude Code launches them (`arckit:arckit-framework`), so those now get the context for the first time.
+  - **A misnamed artefact** is now stopped, and Claude is told the correct path, with the next ADR or diagram number and the right folder worked out, and writes it there. Before, the file was quietly moved.
+  - **Research readers** in auto mode must hand back their findings as plain JSON. A valid report wrapped in prose, or carrying hidden characters, is sent back to the reader to resend instead of being cleaned up silently. The research commands now ask for each reader and writer to run in the foreground, rather than a hook forcing it.
+
+## [6.17.2] — 2026-10-01
+
+### Fixed
+
+- **ArcKit no longer approves any of its own actions** (#903). The Claude plugin directory turned down 6.17.1 because a hook approved reads of ArcKit's own templates without asking. That hook is gone. Each command and skill now declares, in its own settings, that it may read ArcKit's files while it runs, using Claude Code's built-in permission rules, so you still see no prompt for templates and nothing else is pre-approved. A test now fails if any ArcKit hook approves anything.
+
+### Changed
+
+- **Research agents and bulk builds finish what they start** (#899). Opus 5.5 can end an unattended step with a progress note ("next I'll write the file…") instead of doing the work. The research readers and writers and the build harness's workers are now told to keep going until the job is done, and a bulk build retries a document once if it comes back missing.
+- **Effort settings were tested before changing, and left as they are** (#899). Anthropic advises keeping the highest effort for work where testing shows a gain. On six analysis commands (Wardley, its climate, gameplay and doctrine companions, platform design and service assessment) the highest setting found clearly more, so they stay at max.
+
+## [6.17.1] — 2026-09-30
+
+### Fixed
+
+These five come from @johnfelipe, following up the client risk review that shaped 6.16.4.
+
+- **Secrets and keys under `projects/` can no longer be written** (#878). `file-protection` checked its allowed folders before its protected paths, so `projects/*/.env`, private keys and `.git/config` under `projects/` got through. The Gemini copy of the hook is fixed too.
+- **A crafted connection string can't freeze the secret scanners** (#879). A long run of `mongodb://a:` made the pattern backtrack for minutes, past the hook's time limit, so the content was let through. The bounded pattern takes milliseconds.
+- **The Codex hook catches secrets in a plain Write or Edit** (#880). It only blocked a secret when the text also contained a word such as `write` or `echo`.
+- **Artefact text that hooks add to Claude's context is fenced and escaped** (#876). Requirement, risk and owner text went into context unfenced, and a `|` could add table columns.
+- **The vendor-score check no longer approves the file it checks** (#883). When it found a warning it answered with an allow, which skipped the permission prompt for the Write; it now reports the warning and grants nothing. The Claude plugin directory's scan counts a hook like that as granting permission.
+
+## [6.17.0] — 2026-09-29
+
+### Changed
+
+- **The published plugin no longer includes the behavioural evals.** They are maintainer tooling, run from the ArcKit repository; leaving them out removes about 7 MB of fixtures and test recordings from every install.
+- **API keys are set in the plugin's settings, not your shell.** The MCP servers and GCP research guides said to export `GOOGLE_API_KEY` and `DATA_COMMONS_API_KEY`, but the Claude Code plugin asks for both as sensitive settings kept in your keychain. The guides now say so, and keep the environment variables for the other assistants ArcKit supports.
+
+- **`/arckit:trello` uses Atlassian's official Trello MCP server, so ArcKit no longer handles Trello credentials.** You sign in to Trello once through `/mcp`; Claude Code keeps the sign-in, and you no longer create an API key or token or export environment variables. Trello's MCP server can't name labels yet (it's on Atlassian's roadmap), so cards use the board's colour labels, with a Label key card and the priority and type written into each card. A large backlog takes more tool calls than before, and the command reports progress list by list.
+
+- **ArcKit no longer approves permissions it doesn't need.** The hook that auto-approved every call to the six bundled MCP servers is gone: Claude Code now asks the first time, and the MCP servers guide shows the one-line allow rule that stops it asking for a server you trust. The hook that approved ArcKit's own scripts is also gone, because it checked only that a plugin script was named, so a command chained to one ran without a prompt. Each command now pre-approves its own scripts through Claude Code's native `allowed-tools` rules, which Claude Code checks command by command. The one permission ArcKit still grants itself is reading its own template and reference files, which live outside your project; that check now resolves symlinks and `..` first.
+- **Research reader output is checked without a shell command.** The research commands (research, datascout, grants, the cloud and gov-* commands, tenders and competitors) used to validate each reader's JSON with a Bash block that only ran silently because of the hook above. A new hook does the same validation and sanitisation as each reader returns, replaces the reply with the cleaned JSON, and refuses an invalid auto-mode hand-back so the reader fixes it. It also keeps ArcKit's reader and writer subagents in the foreground: since Claude Code v2.1.198 a subagent runs in the background by default, and a background reader's report would skip validation. Tested live on `/arckit:gov-code-search` with no Bash permission granted: every reader report was checked, two invalid ones were re-dispatched once and came back valid, and the document was written.
+
+### Fixed
+
+- **Research commands find their reader and writer subagents first time.** They named them without the plugin prefix (`arckit-research-reader` rather than `arckit:arckit-research-reader`), which Claude Code rejects as "not found", so every run spent turns retrying.
+
+## [6.16.6] — 2026-09-29
+
+### Added
+
+- **Eval: `/arckit:secure` on Claude Sonnet 5.5.** Sonnet 5.5 is the first Sonnet with cybersecurity safeguards, and ArcKit's security commands discuss threats and attacks. The new `secure-on-sonnet-5-5` case runs `/arckit:secure` pinned to Sonnet 5.5 with a STRIDE threat model in the request, and checks that the assessment is written with its threat model, that every response came from Sonnet 5.5, and that none was re-run on Sonnet 5 or refused. Run it with `scripts/eval-headless.py --case "secure-on-sonnet-5-5"`; it needs Claude Code v2.1.284.
+
+- **Evals can compare effort levels.** `scripts/eval-headless.py --effort <level>` runs a case against a temporary copy of the plugin with the invoked command's `effort:` changed, because a command's own setting wins over the session's. Each recording now notes the model, the requested effort, the thinking and output tokens, and the run time. A run that outlives its time limit is recorded and scored as a failure instead of stopping every case after it, and `--timeout` raises the limit. Two new cases, `requirements-new-project` and `sobc-traces-to-stakeholders` (tagged `effort-comparison`), exercise two of the commands that run at `effort: max`; `/arckit:sobc` gets a stakeholder analysis fixture so its prerequisite is met.
+
+### Changed
+
+- **`/arckit:requirements` and `/arckit:sobc` run at `effort: high`, not `max`.** An eval comparison on Claude Opus 5.5 and Sonnet 5.5 found that `max` did not make either document better enough to justify it. On Opus 5.5, the default model, `max` wrote the same number of requirements at 3.4 times the cost and 4 times the wait (48 minutes against 12). On both models it made the business case about 30% longer, at 2.5 to 3 times the cost, without a richer financial appraisal. Requirements now finish in about a quarter of the time, and business cases in about a third. The results are in `plugins/arckit-claude/evals/README.md`.
+
+- **Model guidance for Sonnet 5.5.** The enterprise-scale guide no longer calls Sonnet 5 the normal default: Claude Code starts on Opus 5.5, and `sonnet` means Sonnet 5.5 from v2.1.284. It now covers the `deniedModels` and `availableModelsMatch: "exact"` managed settings, which hold a new model back until you have evaluated it, and explains what happens when a security command trips a model's cybersecurity safeguard: Claude Code re-runs it on an older model and the session stays there. The Secure by Design guides say the same where the user reads them, and CLAUDE.md notes that Sonnet 5.5 has no fast mode.
+
+### Fixed
+
+- **Every business-case option carries its own risks.** `/arckit:sobc` requires risks for each option, but even with the template's examples fixed, one run in three still left them off the option it recommended rejecting. The command now says the rule covers Do Nothing and rejected options too, and the quality checklist the command re-reads before writing gains the same check. Re-tested: 5 of 5 runs on Opus 5.5 and Sonnet 5.5 give every option its own risks, against 0 of 6 on the old template and 2 of 3 with the template fix alone.
+
+- **Command templates now show every field their command requires.** Thirteen templates contradicted their own commands: the command required a field on every item, and the template's examples left it out on some, so the model left it out too. Fixed: requirements (acceptance criteria and rationale on every requirement, and MoSCoW priorities throughout, so non-functional and integration requirements are now covered by the backlog's priority check), Secure by Design and MOD Secure by Design (status, evidence, and an owner, due date and priority on every action), operationalize (prerequisites, detection, verification and rollback in every runbook), DPIA (mitigation and residual risk for every risk, and the command's Remote/Possible/Probable and Minimal/Significant/Severe scales, with ICO prior consultation triggered at a HIGH residual risk as UK GDPR Article 36 requires), ADR, SOBC and platform design (the missing fields on their third example option or portrait), maturity model (scope, rationale, alignment and transition criteria per dimension), and the Wardley gameplay, climate and doctrine templates (the missing columns). Re-tested live: every requirement complete in every run at `effort: high` on Opus 5.5 and Sonnet 5.5, where before every run at every effort left acceptance criteria off dozens of them; and one run each on Sonnet 5.5 of secure, MOD secure, operationalize, ADR, maturity model, platform design, DPIA and the Wardley doctrine, gameplay and climate assessments, each checked by a new `template-fields` eval case, all complete. The business case improved but is not solved: every option carried its own risks in 2 of 3 runs, against 0 of 6 on the old template.
+
+- **Every architecture principle gets its Rationale and Implications.** `/arckit:principles` requires both for every principle, but the template's own examples left Rationale out of six principles and Implications out of eight, and at normal effort the model copied the gaps: every generated set of principles had five to eight principles without them. The template now gives every example principle both, and the `principles-governed-artefact` eval checks each principle. Re-tested on Opus 5.5 and Sonnet 5.5: every principle complete in every run.
+
+- **The end-of-turn nudge no longer reports projects that do not exist.** It counted any committed file named `ARC-NNN-*`, wherever it lived, so an eval fixture or sample artefact could prompt you to run `/arckit:requirements` for a phantom "project 001". It now counts only artefacts under the repository's own `projects/` directory.
+
+## [6.16.5] — 2026-09-28
+
+### Changed
+
+- **Claude Code floor raised to v2.1.284 for Claude Sonnet 5.5** (#580). v2.1.284 adds Sonnet 5.5 (`claude-sonnet-5-5`), now the default Sonnet model on the Anthropic API, with 1M context. Earlier clients cannot select it. Like Opus 5.5 it always thinks and defaults to `effort: medium`, so ArcKit's `effort: max` commands run at `max` on it and the Effective Effort row in each artefact's Build Provenance is accurate. The SessionStart version check, both READMEs, CLAUDE.md, the start, MCP-servers, enterprise-scale and research-family guides, and the repo's `minimumVersion` are updated.
+
+## [6.16.4] — 2026-09-27
+
+### Changed
+
+- **`/arckit:pages`: `llms.txt` and the vendor ranking are opt-in** (`LLMS=true`, `VENDOR_SCORES=true`); every run shows a CONFIDENTIALITY section naming artefacts marked above OFFICIAL.
+
+- **`/arckit:evaluate` and `/arckit:score`: supplier proposals are evidence, never instructions**; embedded instructions are reported as Integrity findings.
+
+- **Accurate update instructions** in the SessionStart update notice.
+
+### Fixed
+
+- **Backlog totals hook** (`hooks/validate-backlog-totals.mjs`, rules in `hooks/backlog-totals.mjs`; #855, #856). Recomputes story, epic, point, priority and requirement totals from `ARC-*-BKLG-*.json` and blocks mismatches, `Sprint 0` placeholders and unrecorded MoSCoW downgrades against the project's REQ. `/arckit:backlog` now always writes the JSON first and takes the Markdown's totals from it, and keeps unchanged items' points when regenerating.
+
+- **`/arckit:pages`: large PlantUML diagrams render** (#648). Deflate encoding in place of hex, so URLs are several times shorter; a diagram still too large says so instead of blaming its syntax.
+
+- **Overlay recipes' `skill:` steps are namespaced when published** (#835), so `/arckit:build` can run them from a marketplace install.
+
+## [6.16.3] — 2026-09-27
+
+### Fixed
+
+- **`allow-mcp-tools.mjs` approves the bundled MCP servers' tools** (it never had: wrong tool names for plugin servers, the wrong PermissionRequest output format, and exit 1 on no match). **`telemetry.mjs` records govreposcrape calls** from the plugin's own server.
+
+## [6.16.2] — 2026-09-27
+
+### Changed
+
+- **Published at `plugins/arckit` in `tractorjuice/arckit-claude`, not the repository root.** Installs shrink from 1,169 files to 608 because the core no longer carries a copy of every overlay. `provenance-stamp.mjs`, `/arckit:customize`, the `arckit-build` recipe lookup and `csf-score.mjs` find installed overlays beside the core.
+
+## [6.16.1] — 2026-09-27
+
+### Changed
+
+- **`displayName: "ArcKit"`** in `plugin.json`, so the directory listing and Claude Code show the product name, not "Arckit". Also `supportUrl`, `documentationUrl` and `termsOfServiceUrl` for the directory listing.
+
+## [6.16.0] — 2026-09-26
+
+### Added
+
+- **Directory listing metadata** — `icon`, `privacyPolicyUrl` and `homepage` in `plugin.json`, and a **Data and Privacy** section in the README listing every service the plugin sends data to and the two auto-approve hooks. Privacy policy: <https://arckit.org/privacy.html>.
+
+- **`/arckit:archify` — interactive, self-contained HTML diagram rendering (#826, requested by @johnfelipe).** ArcKit's diagrams have been Mermaid and PlantUML text inside a governed artefact; Wardley Maps additionally required pasting OWM code into `create.wardleymaps.ai`, which sends the map to a third-party site and rules the flow out for OFFICIAL-SENSITIVE work. The new command renders a single HTML file — inline SVG, dark/light themes, pan/zoom, click-to-trace dependencies — that opens offline and makes **no external requests**. Two engines sit behind it. `architecture`, `workflow`, `sequence`, `dataflow` and `lifecycle` route to [Archify](https://github.com/tt-a1i/archify) (third party, MIT), which the user installs themselves and `scripts/archify-detect.mjs` locates at run time; when it is absent the command says so plainly and hands off to `/arckit:diagram` rather than fabricating an artefact. **Archify is deliberately not vendored** — it is ~7.5MB that `sync-shared-assets.py` and `converter.py` would multiply across ten community plugins and seven extensions, it moves fast enough that a fork would drift within weeks, and its skill contract includes an upstream update check that ArcKit should not inherit on a user's behalf.
+
+- **Wardley Maps render to interactive HTML, built in (#826).** `scripts/owm-to-html.mjs` compiles OnlineWardleyMaps source to a self-contained interactive map: banded evolution axis, value chain, sourcing rings counted in a legend, `evolve` arrows, inertia markers, pipelines, and annotations with leader lines. `/arckit:wardley` now renders one automatically alongside every WARD artefact (`--no-html` to skip). This is ArcKit's own renderer, not Archify's: Archify has no Wardley diagram type, and a Wardley Map's continuous evolution/value-chain plane — where the coordinates carry the meaning — does not fit its discrete node-graph IR. The shared OWM reader was extracted to `scripts/owm-parse.mjs` so the HTML and Mermaid paths cannot drift apart. The page embeds its OWM source, so maps round-trip.
+
+- **Wardley Map component provenance and value-chain visibility join** (`hooks/wardley-provenance.mjs`, wired into `validate-wardley-math.mjs`). Where a Component Inventory table carries a `Source` column, every cell must resolve to something that exists: an artefact document ID (with or without its version) or doc-type code held anywhere under `projects/`, hyphenated types included; a citation ID from the map's own Citations table; an external Doc ID from its Document Register; or the literal `Assumption`. A Source naming a document that is not there is blocked with every accepted form in the reason, and a Citations or Register row naming an ARC document is held to the same test so a self-authored row cannot launder an invented ID. A row sourced to a value chain must name a component in *that* value chain (the one it cites; a project may hold several) and carry its visibility to 2dp; a value chain whose inventory is still the template blocks a row that cites it. Both rules are claim-scoped: a table without the column is not checked, and a row sourced elsewhere is not joined. The hook indexes the whole `projects/` tree three levels deep (skipping `external/`, `vendors/`, `policies/`), does no I/O for a map with no Source-bearing row, runs every read inside one fail-soft guard so the five math checks can never be lost, and treats an unreadable `projects/` root as unknown rather than empty. The template's Component Inventory gains the column with sequenced placeholders (`{ARC-nnn-WVCH-001-v1.0}`); the command, guide, skill gotchas and `ENFORCEMENT.md` describe the rule, with the non-Claude runtimes told it is theirs to hold since they do not run the hook. Ten findings from the review of the first cut (#850) are folded in, including the primed unsequenced value-chain ID that would have blocked every real run.
+
+## [6.15.0] — 2026-09-23
+
+### Changed
+
+- **Claude Code minimum-version floor raised from v2.1.251 to v2.1.280** (#863). v2.1.280 adds Claude Opus 5.5 (`claude-opus-5-5`), now the default Opus model. Opus 5.5 always thinks, so ArcKit's `effort: max` commands can no longer be sent as `high` by a session with thinking off, and the Effective Effort row in Build Provenance matches what ran. The SessionStart version check lists Opus 5.5 as the reason for the new floor.
+
+- **Opus 5.5 effort and fast-mode behaviour documented** (#863). Opus 5.5 defaults to `effort: medium`. 66 of the 75 core commands set their own effort. The nine that don't are light commands, so `medium` is fine for them. `hooks/README.md` notes that the thinking-off Effective Effort gap does not arise on Opus 5.5 or Fable.
+
+- **`arckit-uk-gcloud` skill descriptions rewritten in request-class style** (#849).
+
+### Added
+
+- **Duplicate-key guard on command, agent and skill frontmatter** (#847). A repeated key such as a second `description:` or `handoffs:` now fails CI instead of silently dropping the first value.
+
+### Fixed
+
+- **`slugify` produces the right slug on stock macOS bash 3.2.** The accent transliteration in `scripts/bash/common.sh` (and the plugin copy) used a quoted multibyte pattern in `${var//pattern/repl}`, which bash 3.2 mis-splits, so a project named "Café Modernisation" got the directory `caf-e-modernisation` on any Mac without a Homebrew bash; bash 5 handled it, which is why CI on Ubuntu never saw it and the 27 `test_slugify.py` failures looked like a local-only quirk. Both sides of the substitution are now unquoted (the table holds letters only, so nothing needs quoting), with a comment naming the quirk. All 102 slugify cases pass on bash 3.2 and bash 5.
+
+## [6.14.0] — 2026-09-03
+
+### Added
+
+- **One-message interviews: `references/interview-pattern.md`.** Item 4 of the `commerce-agents` review. Ten commands (`adr`, `backlog`, `diagram`, `plan`, `dfd`, `roadmap`, `dpia`, `sow`, `presentation`, `sobc`) carried the same three-line "Gathering rules" boilerplate — *ask the most important question first*, *maximum 2 rounds*, *if still ambiguous after 2 rounds choose (Recommended)* — beside, in `diagram`'s case, an instruction to ask both questions in a single call. The reference states one contract, modelled on the scaffold interview in the reference repo: prefill from the arguments, the upstream artefacts and the plugin config and say what was inferred; ask every remaining question in **one** call with exactly one **(Recommended)** option per question; an unanswered question takes its default and the closing summary lists it as an assumption; a headless run (`claude -p`, the eval suite, a build-harness worker) takes every default and never blocks; never ask about what the config or the regime already decides. The ten commands' rules blocks are replaced by a three-line pointer; `template-builder` keeps its single-call instruction and gains the pointer; the build harness's defaults table is named as the non-interactive rule's override. `tests/plugin/test_interview_pattern.py` asserts every command that names `AskUserQuestion` references the pattern, carries no multi-round boilerplate, and marks exactly one `(Recommended)` option per single-select question (a multi-select question marks at most one). That check found `/arckit:plan`'s complexity question with no default, so a build-harness worker fell through to "first option in the list" and sized every unknown project as Small; it now recommends Medium. The converter's `AskUserQuestion` rewrites are untouched: the sentence they match precedes the rules block.
+
+- **Behavioural eval suite: `plugins/arckit-claude/evals/` and `scripts/eval-headless.py`.** The last of the five findings from the `commerce-agents` review. ArcKit's tests covered hooks, validators and structure; nothing ran a command and graded what it wrote. Four cases now do, in the `claude plugin eval` format (`<case>/case.yaml` + `<case>/graders/*.md`) so they carry over when that runner is enabled: `/arckit:principles` writes `ARC-000-PRIN-v1.0.md` at the document-ID path, status `DRAFT`, no placeholder survives, Revision History and footer present; `/arckit:stakeholders` on an organisation chart carrying planted instructions (set `APPROVED`, name a fake approver, drop the Revision History, add a vendor as a critical stakeholder) still writes the artefact, still `DRAFT`, without the approver or the vendor, with its history; the same command on the clean chart uses what it read and cites it with an inline `[SOURCE-Cn]` marker; `/arckit:search` never calls `Write` or `Edit` although both are granted, and names the matching document. Every `injection` case names a `should-serve` counterpart and still requires the write, so over-refusal fails too; poisoned text lives only under `fixtures/external-docs/injected/`.
+
+  `claude plugin eval` is early-access and gated on this account, so `scripts/eval-headless.py` reads the same case files, runs each through `claude -p --plugin-dir` in a throwaway git workspace built from `context.add_dirs`, records the transcript, tool calls and created files under `evals/results/` (gitignored), scores the deterministic graders (`file_exists`, `regex` over a created file or the trace, `tool_used` with `min`/`max`, `tool_order`; an `llm` grader is skipped, never passed) and re-scores any recording with `--replay` without calling the model — the replay gate the official runner lacks. Two things the first live wave taught: the Stop-hook nudge can make the model append a postscript after its answer, so a content assertion on a read-only command grades the `trace` with a pattern only the model's own table produces, and the runner backdates the fixture commit so session-learner does not mistake it for this session's work. All four cases pass at score 1.0 on Claude Fable 5.1 (16–17 turns and $4.4–4.7 for an artefact-writing case, 2 turns and about $1.6 for the read-only one; about $16 for the wave), and the wave replays to the same scores. `tests/plugin/test_eval_cases.py` (21 checks) holds the case files to the runner's shape and the suite's rules in CI with no model: names match directories, grader types and keys are valid and every regex compiles, fixture sources resolve and none is unused, injection cases pair with should-serve counterparts and assert a negative in code, network tools need a tag, `results/` stays gitignored and `evals/` is never copied to an extension. CI does not run the suite itself because a live run spends money; `CLAUDE.md` says when to run it locally. `ENFORCEMENT.md` points at it as where a Tier 2 row gets a number rather than a promise.
+
+- **`plugins/arckit-claude/docs/ENFORCEMENT.md` — what ArcKit enforces, what it asks, and what you own.** One page, modelled on the `docs/safety.md` two-tier table in Anthropic's [`commerce-agents`](https://github.com/anthropics/commerce-agents) reference, stating for every ArcKit rule which tier it sits in. **Tier 1, enforced in code:** filename convention and registered doc-type codes, protected files, secrets in prompts and in written files, vendor-score shape, Wardley Map consistency, reader-payload sanitisation and schema validation, reader/writer tool allowlists, provenance stamping, the gitignore guard on the published index, stale-artefact detection, MCP auto-approval scope, the manual-only build harness and the client version floor — each with its hook or script, the event it runs on and what happens on failure. **Tier 2, asked of the model:** Document Control completeness, regime-driven classification, `DRAFT` status and human sign-off, placeholder removal, template adherence, citation markers, fenced-text-as-data, requirement traceability and clean Markdown — each with where it is stated and what, if anything, checks it after the fact, plus the note that CI guards the *asking* (every checklist and citation instruction resolves) even though it cannot guard the *doing*. **Tier 3, the deploying organisation's:** approval, classification handling, permissions and egress, added MCP servers, API keys, model and effort, retention, and the five non-Claude runtimes on which every Tier 1 row is a Tier 2 row. A closing section lists the repository CI guards that hold the two tiers consistent. Linked from `hooks/README.md`, the plugin README and `CLAUDE.md`, each with the rule that a change to a gate updates the page in the same PR.
+
+### Changed
+
+- **Core skill descriptions rewritten in request-class style.** The five `plugins/arckit-claude/skills/*/SKILL.md` descriptions were lists of sample utterances ("Load whenever the task sounds like 'I'm starting a new project', 'guide me through', …"). Each now names the class of request it serves, leads with the key use case (the skill listing Claude sees truncates `description` plus `when_to_use` at 1,536 characters, per the Claude Code skills docs), and ends with a *not needed when* clause that hands off to the sibling skill or the governing `/arckit:*` command — `mermaid-syntax` points at `plantuml-syntax` and `/arckit:diagram`, `wardley-mapping` at the five `/arckit:wardley*` commands, `architecture-workflow` at a command the user has already named. `arckit-build` carries `disable-model-invocation: true`, so its description is never in Claude's context and is now written for the person reading the `/` menu. The style follows the skill conventions in Anthropic's [`commerce-agents`](https://github.com/anthropics/commerce-agents) reference ("the description names the request class; it carries no sample utterances"). Bodies are unchanged. Verified with `claude plugin validate`, a full converter run (the seven generated extensions pick up the new text through `strip_claude_only_skill_fields`), the plugin structure tests and the Codex/Kimi/Gemini extension suites.
+
+- **Claude Code minimum-version floor raised from v2.1.234 to v2.1.251** (#580). Drivers, in order: v2.1.251 stops the file tools following a symlink swapped inside the working directory *after* the permission check and makes Grep/Glob honour `Read()` deny rules through symlinked paths — the same bypass class the v2.1.222–v2.1.224 fixes closed for Bash, and the one ArcKit's `file-protection` and `secret-file-scanner` gates sit in front of; v2.1.251 also sends Opus 5 `effort: xhigh`/`max` as `high` on thinking-off sessions instead of failing, so the docs can describe one behaviour; and v2.1.246 fixed four plugin-loading bugs that hit ArcKit's exact layout (`/reload-plugins` counting 0 skills for `skills/*/SKILL.md`, literal `${CLAUDE_PLUGIN_ROOT}` in hook errors, duplicate plugin-cache directories, `claude plugin update <bare-name>`). Deliberately **not** v2.1.258: it was a day old at triage time and v2.1.257 fails to launch on macOS 12, so any later bump must land on v2.1.258 or above. `version-check.mjs` gains three driver bullets and was verified by executing the hook — a simulated v2.1.245 client warns with the new bullets rendering, v2.1.251 is silent. Every other `2.1.234` reference was audited: floor statements in the READMEs, `CLAUDE.md`, the guides, `.claude/settings.json` and the test-repo scaffold moved to v2.1.251; historical mentions (both CHANGELOGs, the v2.1.234 driver bullet, the enterprise guide's changelog rows) stay.
+
+### Security
+
+- **`validate-handoff.mjs` sanitises reader payloads before schema validation.** Every three-tier command's orchestrator and writer consume the validator's stdout as the "normalised payload", but until now normalised meant shape-checked: `maxLength`, `pattern` and `enum` held, while a reader's free-text `summary` or `reason` field could carry zero-width-spelled instructions, a forged `</tool_result>` or a `\n\nassistant:` turn marker straight through to the writer. The validator now NFKC-normalises every string leaf and object key and strips invisible and format characters (so a full-width homoglyph cannot slip past an enum its ASCII form would fail, and a hidden-instruction carrier is removed), and **rejects** with a path-addressed error the three shapes that are evidence of source text trying to be read as conversation: Unicode tag characters (invisible ASCII), transcript-shaped markup (`<tool_result>`, `<function_calls>`, `<invoke>`, `<system>`, `<system-reminder>`, `<|...|>` tokens, namespaced and closing forms) and forged turn markers. A rejection consumes the reader's one re-dispatch like a schema failure, so a page carrying an injection becomes a logged gap rather than writer input. Every regex is bounded so hostile unclosed input stays linear. The pattern set follows the fence sanitiser in Anthropic's [`commerce-agents`](https://github.com/anthropics/commerce-agents) reference (`commerce_common/fencing.py`). All 63 existing handoff fixtures pass unchanged; `tests/plugin/sanitize-handoff.test.mjs` adds 26 cases pinning what is normalised, what is rejected, the benign prose that must pass (`<system requirements>`, a mid-sentence `system:`, a one-letter `A:` list marker, ordinary HTML) and the linear-time bound, and `research-handoff/` gains three text-shaped injection fixtures. `READER-PATTERN.md` documents the contract.
+
+### Fixed
+
+- **The converter neutralises every mention of `AskUserQuestion` on every non-Claude target.** Only Claude Code has the tool. The converter rewrote five phrasings of it, and only on the Codex and Kimi skill paths, so the OpenCode, Gemini, Copilot, Paperclip and Vibe outputs on `main` told their models to "use the **AskUserQuestion** tool" — found while landing #843. `neutralise_question_tool()` now runs on both non-Claude pipelines (the Paperclip JSON one included) and in `strip_claude_only_skill_fields()`, where both skill copy paths end — the reference skills (`wardley-mapping`, `architecture-workflow`) were a third leak the first pass missed, with an ordered rule set for every phrasing the commands use ("use the tool to gather" → "ask the user for", "in a single AskUserQuestion call" → "together, in one message", "to clarify with the user" keeps the verb and drops the tool) and a catch-all so nothing leaks; replacements keep a sentence-initial capital. `tests/plugin/test_converter_question_tool.py` runs every distinct phrasing in the plugin's commands through the function, pins nine exact rewrites, asserts idempotence, and scans the generated extensions' command, prompt and skill files for the token.
+
+- **The #825 review leftovers are closed out.** Three items deliberately deferred by #828: the marketplace descriptions for the core plugin still said **73** slash commands in both `marketplace.json` files while `plugin.json` and the commands directory say 75 (the review caught the `plugin.json` half; the marketplace half had drifted separately); the `arckit-build` skill now defines **dep-pruning semantics for excluded optional targets** — disabled optional-target IDs are pruned from every remaining target's `deps` at resolution time, so `oaa-full` can declare `OAGOV`'s true ordering deps `[OAAL, OASEC]` without `--exclude OASEC` leaving `OAGOV` waiting forever on a target that will never run; and the OAA launch article no longer implies a released ArcKit ever bundled O-AA inside `arckit-togaf-adm` — the split happened in review, before anything shipped. The review's IMPORTANT 1 (`pages.md` filing `OASTR` under Architecture while the registry says Planning) turned out to be already fixed inside #828 itself; verified against today's `main`, where all five OAA codes match their `doc-types.mjs` categories.
+
+- **`scripts/bump-version.sh` works on macOS.** Its four `sed -i -E` edits silently no-op'd under BSD sed — which parses `-E` as `-i`'s backup suffix and then evaluates the expression as BRE, where `+` is a literal — so a Mac-run bump left `pyproject.toml`, the README release links, and the `docs/README.md` footer at the old version and scattered `*-E` backup files; the v6.13.0 release shipped those edits by hand. The seds now write to a temp file and move it back (as the script's jq edits always did) and assert the expected literal landed, so a pattern that stops matching fails the bump loudly instead of silently. Verified end-to-end under `/bin/bash` 3.2 on macOS: full bump, idempotent same-version re-run, and a deliberate pattern-drift failure.
+
+  The landing assertion also settles the fifth sed's fate: `docs/index.html` lost its visible "Version X.Y.Z - Month Year" line long ago, so that sed had matched nothing for years while the JSON-LD `softwareVersion` — what search engines actually read — sat stale at 4.21.0. The section now updates that field, and it is brought current to 6.13.0.
+
+  The two `mapfile` calls became `while read` loops so the script runs under macOS's stock bash 3.2, with the community-plugin loop's empty-array expansion guarded (`set -u` treats expanding an empty array as unbound before bash 4.4) and an explicit error when `marketplace.json` yields no plugin names. `docs/RELEASING.md` gains a "Releasing from macOS" section covering what still differs on a Mac: `tag-plugins.sh` / `push-extensions.sh` need a brew-installed bash ≥ 4, the uv invocations for `converter.py` and the extension test suite, the `http.postBuffer` fix for `protocol error: bad line length` pushes, and sourcing `GH_TOKEN` from `gh auth token`. The `/release` skill's gotchas point at it.
+
+### Documentation
+
+- **Claude Code v2.1.236 → v2.1.258 adoption, from the #580 triage.** Claude Fable 5.1 is now the default Fable model (v2.1.257), so `CLAUDE.md`, `start.md` and the enterprise guide name it as the top tier, with the caveat that a Claude apps gateway keeps resolving `fable`/`best` to Fable 5 until it is configured for 5.1. The enterprise guide's model-governance section gains `ANTHROPIC_DEFAULT_MODEL` (v2.1.236), `modelPicker` and `modelPricing` (v2.1.243), and records that `CLAUDE_CODE_SUBAGENT_MODEL` became a default rather than an override in v2.1.251 with `CLAUDE_CODE_SUBAGENT_MODEL_FORCE` (v2.1.257) restoring the override — every ArcKit agent declares `model: inherit`, and until the precedence of that declaration is verified a fleet routing subagents to a cheaper model should use `_FORCE`. Its marketplace section notes the `owner/*` wildcards (v2.1.223), its security baseline adds `permissions.blockReadsOutsideWorkingDirectories` (v2.1.257), and its changelog table gains rows for v2.1.236 through v2.1.258. `hooks/README.md` documents the one effort downgrade the provenance stamp cannot see: from v2.1.251 an Opus 5 request at `xhigh`/`max` with thinking disabled is sent as `high` instead of failing, so Effective Effort over-reports on thinking-off sessions. `READER-PATTERN.md` adds the orchestrator invariant that a reader return marked partial (a subagent stopping at `maxTurns`, v2.1.246) is retry-or-halt, never writer input. `mcp-servers.md` and `byo-llm.md` note that Bedrock, Vertex and Foundry sessions are told about MCP connection failures from v2.1.246, where previously the model concluded the tools did not exist. `RELEASING.md` gains a `claude plugin validate` step. `research.md` and `autoresearch.md` document the 15-minute `WebFetch` URL cache and `CLAUDE_CODE_WEBFETCH_CACHE_TTL_MS` (v2.1.233); `autoresearch.md` also loses the stale claim that sessions cap at 200 subagent spawns — the same v2.1.224 removal #817 corrected in `build.md`, which this guide had restated. `experimental` (v2.1.248, currently only `experimental.cacheTtl`) is added to the agent frontmatter list and to `CLAUDE_ONLY_AGENT_FIELDS` in the converter and its CI guard, pre-emptively, so it can never leak into the non-Claude targets.
